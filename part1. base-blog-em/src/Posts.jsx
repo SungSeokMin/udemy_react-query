@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useQuery } from 'react-query';
 
-import { PostDetail } from "./PostDetail";
+import { PostDetail } from './PostDetail';
 const maxPostPage = 10;
 
 async function fetchPosts() {
-  const response = await fetch(
-    "https://jsonplaceholder.typicode.com/posts?_limit=10&_page=0"
-  );
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=10&_page=0');
+
   return response.json();
 }
 
@@ -15,17 +15,23 @@ export function Posts() {
   const [selectedPost, setSelectedPost] = useState(null);
 
   // replace with useQuery
-  const data = [];
+  const { data, isLoading, isError } = useQuery(['posts'], fetchPosts, {
+    staleTime: 3000,
+  });
+
+  if (isLoading) {
+    return <h3>Loading ...</h3>;
+  }
+
+  if (isError) {
+    return <h3>Oops, something went wrong</h3>;
+  }
 
   return (
     <>
       <ul>
-        {data.map((post) => (
-          <li
-            key={post.id}
-            className="post-title"
-            onClick={() => setSelectedPost(post)}
-          >
+        {data?.map((post) => (
+          <li key={post.id} className="post-title" onClick={() => setSelectedPost(post)}>
             {post.title}
           </li>
         ))}
