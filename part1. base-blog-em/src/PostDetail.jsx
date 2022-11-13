@@ -27,8 +27,19 @@ export function PostDetail({ post }) {
     isError,
   } = useQuery(['comments', post.id], () => fetchComments(post.id));
 
-  const { mutate: onUpdate } = useMutation(updatePost);
-  const { mutate: onDelete } = useMutation(deletePost);
+  const {
+    mutate: onUpdate,
+    isSuccess: updateSuccess,
+    isLoading: updateLoading,
+    isError: updateError,
+  } = useMutation(updatePost);
+
+  const {
+    mutate: onDelete,
+    isSuccess: deleteSuccess,
+    isLoading: deleteLoading,
+    isError: deleteError,
+  } = useMutation(deletePost);
 
   if (isLoading) return <h3>Loading ...</h3>;
   if (isError) return <h3>isError ...</h3>;
@@ -36,8 +47,19 @@ export function PostDetail({ post }) {
   return (
     <>
       <h3 style={{ color: 'blue' }}>{post.title}</h3>
+
       <button onClick={() => onDelete(post.id)}>Delete</button>
+
+      {deleteError ? <p style={{ color: 'red' }}>Error deleting the post</p> : null}
+      {deleteLoading ? <p style={{ color: 'pruple' }}>Deleting the post</p> : null}
+      {deleteSuccess ? <p style={{ color: 'green' }}>Post has (not) been deleted</p> : null}
+
       <button onClick={() => onUpdate(post.id)}>Update title</button>
+
+      {updateError ? <p style={{ color: 'red' }}>Error ueleting the post</p> : null}
+      {updateLoading ? <p style={{ color: 'pruple' }}>Ueleting the post</p> : null}
+      {updateSuccess ? <p style={{ color: 'green' }}>Post has (not) been updated</p> : null}
+
       <p>{post.body}</p>
       <h4>Comments</h4>
       {comments.map((comment) => (
