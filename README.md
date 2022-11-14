@@ -7,6 +7,7 @@ react-query의 기본 개념은 [react-query](https://velog.io/@jkl1545/React-Qu
 - [staleTime vs cacheTime](#staletime-vs-cachetime)
 - [isLoading vs isFetching](#isloading-vs-isfetching)
 - [custom hooks를 이용한 useQuery 호출](#custom-hooks를-이용한-usequery-호출)
+- [useIsFetching을 이용한 로딩처리](#useisfetching을-이용한-로딩처리)
 
 ---
 
@@ -45,5 +46,24 @@ export function use...(): Types[] {
   const { data } = useQuery([querykey], apiCall);
 
   return data;
+}
+```
+
+> ## useIsFetching을 이용한 로딩처리
+
+현재 가져오기 중인 쿼리가 있는지를 알려주는 react-query의 hooks이다.
+
+useIsFetching을 사용하면 각각의 custom hooks에서 isFetcing 메서드를 사용할 필요가 없다는 장점을 지닌다.
+
+```js
+import { Spinner } from '...';
+import { useIsFetching } from 'react-query';
+
+export function Loading(): ReactElement {
+  const isFetching = useIsFetching();
+
+  const display = isFetching ? 'inherit' : 'none';
+
+  return <Spinner display={display}>Loading...</Spinner>;
 }
 ```
