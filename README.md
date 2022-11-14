@@ -6,6 +6,7 @@ react-query의 기본 개념은 [react-query](https://velog.io/@jkl1545/React-Qu
 
 - [staleTime vs cacheTime](#staletime-vs-cachetime)
 - [isLoading vs isFetching](#isloading-vs-isfetching)
+- [custom hooks를 이용한 useQuery 호출](#custom-hooks를-이용한-usequery-호출)
 
 ---
 
@@ -25,3 +26,24 @@ cacheTime은 쿼리가 `inactive 상태일 때 캐싱된 상태로 남아있는 
 
 즉, `첫 번째 쿼리를 가져올 때 isLoading은 true -> false`로 변환되고,  
 `캐시 유무에 상관없이 데이터가 요청 중일 때 isFetching은 true -> false`로 변환된다.
+
+> ## custom hooks를 이용한 useQuery 호출
+
+1. 다수의 컴포넌트에서 데이터를 액세스 해야 하는 경우 `useQuery 호출을 재작성할 필요가 없다.`
+2. 다수의 useQuery 호출을 사용한다면 사용 중인` query key의 종류가 헷갈릴 수 있지만, custom hooks를 이용하면 헷갈릴 일이 없다.`
+
+```js
+// api 호출 함수
+async function apiCall(): Promise<Types[]> {
+  const { data } = await axiosInstance.get('...');
+
+  return data;
+}
+
+// custom hooks
+export function use...(): Types[] {
+  const { data } = useQuery([querykey], apiCall);
+
+  return data;
+}
+```
