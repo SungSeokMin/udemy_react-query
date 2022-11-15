@@ -27,7 +27,7 @@ export function getMonthYearDetails(initialDate: dayjs.Dayjs): MonthYear {
   const firstDOW = Number(startDate.format('d'));
   const lastDate = Number(startDate.clone().endOf('month').format('DD'));
   const monthName = startDate.format('MMMM');
-  return { startDate, firstDOW, lastDate, monthName, month, year };
+  return { month, year, startDate, firstDOW, lastDate, monthName };
 }
 
 export function getNewMonthYear(
