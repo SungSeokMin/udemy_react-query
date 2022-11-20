@@ -57,8 +57,6 @@ export function useAppointments(): UseAppointments {
     user,
   ]);
 
-  const { year, month } = monthYear;
-
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -72,8 +70,8 @@ export function useAppointments(): UseAppointments {
   }, [queryClient, monthYear]);
 
   const { data: appointments = [] } = useQuery(
-    [queryKeys.appointments, year, month],
-    () => getAppointments(year, month),
+    [queryKeys.appointments, monthYear.year, monthYear.month],
+    () => getAppointments(monthYear.year, monthYear.month),
     {
       ...commonOptions,
       refetchOnMount: true,
