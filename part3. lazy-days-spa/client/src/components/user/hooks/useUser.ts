@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { AxiosResponse } from 'axios';
 import { useQuery, useQueryClient } from 'react-query';
 
@@ -10,12 +12,16 @@ import {
   setStoredUser,
 } from '../../../user-storage';
 
-async function getUser(user: User | null): Promise<User | null> {
+async function getUser(
+  user: User | null,
+  signal: AbortSignal,
+): Promise<User | null> {
   if (!user) return null;
 
   const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
     `/user/${user.id}`,
     {
+      signal,
       headers: getJWTHeader(user),
     },
   );
@@ -31,12 +37,16 @@ interface UseUser {
 export function useUser(): UseUser {
   const queryClient = useQueryClient();
 
-  const { data: user } = useQuery([queryKeys.user], () => getUser(user), {
-    initialData: getStoredUser,
-    onSuccess: (received: User | null) => {
-      received ? setStoredUser(received) : clearStoredUser();
+  const { data: user } = useQuery(
+    [queryKeys.user],
+    ({ signal }) => getUser(user, signal),
+    {
+      initialData: getStoredUser,
+      onSuccess: (received: User | null) => {
+        received ? setStoredUser(received) : clearStoredUser();
+      },
     },
-  });
+  );
 
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
