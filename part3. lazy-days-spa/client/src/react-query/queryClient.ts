@@ -25,5 +25,8 @@ export const queryClient = new QueryClient({
       refetchOnReconnect: false,
       onError: queryErrorHandler,
     },
+    mutations: {
+      onError: queryErrorHandler,
+    },
   },
 });
