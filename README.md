@@ -8,6 +8,7 @@ react-query의 기본 개념은 [react-query](https://velog.io/@jkl1545/React-Qu
 - [isLoading vs isFetching](#isloading-vs-isfetching)
 - [custom hooks를 이용한 useQuery 호출](#custom-hooks를-이용한-usequery-호출)
 - [useIsFetching을 이용한 로딩처리](#useisfetching을-이용한-로딩처리)
+- [invalidate is not working](#invalidate-is-not-working)
 
 ---
 
@@ -66,4 +67,16 @@ export function Loading(): ReactElement {
 
   return <Spinner display={display}>Loading...</Spinner>;
 }
+```
+
+> ## invalidate is not working
+
+해당 컴포넌트가 unmount 되면서 inactive 상태로 바뀌고 refetchOnMount 속성이 false로 되있을 가능성이 높다.
+
+refetchOnMount 속성이 false로 되있을 경우 invalidate의 옵션으로 refetchType를 `inactive`로 설정해주면 된다.
+
+```js
+queryClient.invalidateQueries([queryKey], {
+  refetchType: 'inactive',
+});
 ```
